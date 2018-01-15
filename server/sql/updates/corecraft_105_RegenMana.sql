@@ -1,0 +1,4 @@
+-- world
+ALTER TABLE creature_template
+ADD COLUMN RegenMana TINYINT UNSIGNED NOT NULL DEFAULT 1
+AFTER RegenHealth;

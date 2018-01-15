@@ -1,0 +1,79 @@
+############################################
+# MaNGOS realmd configuration file         #
+############################################
+
+ConfVersion=2015041301
+
+###################################################################################################################
+# REALMD SETTINGS
+#
+#    LoginDatabaseInfo
+#        Database connection settings for the realm server.
+#        Default: hostname;port;username;password;database
+#                 .;somenumber;username;password;database - use named pipes at Windows
+#                       Named pipes: mySQL required adding "enable-named-pipe" to [mysqld] section my.ini
+#                 .;/path/to/unix_socket;username;password;database - use Unix sockets at Unix/Linux
+#                       Unix sockets: experimental, not tested
+#
+#    MaxPingTime
+#         Settings for maximum database-ping interval (minutes between pings)
+#
+#    RealmServerPort
+#         Port on which the server will listen
+#
+#    BindIP
+#         Bind Realm Server to IP/hostname
+#         This option is useful for running multiple worldd/realmd instances
+#         on different IP addresses using default ports.
+#         DO NOT CHANGE THIS UNLESS YOU _REALLY_ KNOW WHAT YOU'RE DOING
+#
+#    PidFile
+#        Realmd daemon PID file
+#        Default: ""             - do not create PID file
+#                 "./realmd.pid" - create PID file (recommended name)
+#
+#    UseProcessors
+#        Used processors mask for multi-processors system (Used only at Windows)
+#        Default: 0 (selected by OS)
+#                 number (bitmask value of selected processors)
+#
+#    ProcessPriority
+#        Process proirity setting (Used only at Windows)
+#        Default: 1 (HIGH)
+#                 0 (Normal)
+#
+#    WaitAtStartupError
+#        After startup error report wait <Enter> or some time before continue (and possible close console window)
+#                 -1 (wait until <Enter> press)
+#        Default:  0 (not wait)
+#                  N (>0, wait N secs)
+#
+#    RealmsStateUpdateDelay
+#        Realm list Update up delay (updated at realm list request if delay expired).
+#        Default: 20
+#                 0  (Disabled)
+#
+#    WrongPass.MaxCount
+#        Number of login attemps with wrong password before the account or IP is banned
+#        Default: 0  (Never ban)
+#
+#    WrongPass.BanTime
+#        Duration of the ban in seconds (0 means permanent ban)
+#        Default: 600
+#
+###################################################################################################################
+
+LoginDatabaseInfo = "127.0.0.1;3306;mangos;mangos;realmd"
+MaxPingTime = 30
+RealmServerPort = 3724
+BindIP = "0.0.0.0"
+PidFile = ""
+UseProcessors = 0
+ProcessPriority = 1
+WaitAtStartupError = 0
+RealmsStateUpdateDelay = 20
+WrongPass.MaxCount = 0
+WrongPass.BanTime = 600
+
+[LOGGERS]
+root = 2

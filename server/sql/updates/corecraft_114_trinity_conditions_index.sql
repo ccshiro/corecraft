@@ -1,0 +1,4 @@
+-- world
+
+ALTER TABLE trinity_conditions
+ADD COLUMN id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;

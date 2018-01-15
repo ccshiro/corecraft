@@ -1,0 +1,90 @@
+Everything in this document has been researched on retail Mists of Pandaria (as
+it will change in WoD) or through videos.
+Related post by GM:
+http://us.battle.net/wow/en/forum/topic/13087818929?page=6#114
+(post content is added below as blizzard are infamous for breaking links on
+their forum)
+
+== Main rule:
+Spells when hit are queued on the target. Queues are batch executed every 400
+ms.
+== Exceptions:
+Spells cast on you are instant (not queued). This includes triggered spells to
+some degree; there are exceptions, but we have yet to figured out a rule for
+when it applies and when it doesn't.
+
+== Important notes in relation to vanish:
+1) A hostile spell that's in its delay phase (travelling) gets silently dropped
+   if the rogue vanishes (it does nothing when it arrives).
+2) If a hostile spell is in the queue, and you hit vanish, that spell is
+   cancelled.
+   Whether your pending stealth is removed or not is variable (see below).
+3) After you activate vanish, there's a brief period of time where you're still
+   visible. Any hostile spell that is cast on you during this point will break
+   your stealth and cause its effects on you when it arrives.
+example of 2 and 3: https://www.youtube.com/watch?v=hyYixOpAGC4
+
+== What happens with the pending stealth on vanish:
+If you vanish while any hostile spell is in the queue, this happens with your
+	stealth:
+does the spell have a damage component? the stealth STAYS
+	(e.g. shadowfury, frostbolt, starfire, moonfire, gouge, etc)
+does the spell NOT have a damage component? the stealth is REMOVED
+	(e.g. blind, polymorph, fear)
+NOTE:
+This is likely explainable by a hack-fix from blizzard, where they intended to
+lessen the whine people were bringing about vanish breaking.
+
+== Implementation Details
+Channel starts right away when the spell finishes.
+Cast items are deleted after all spell effects have been processed on all
+    targets.
+Damage threat is when the actual effect hits (i.e. in dealdamage)
+(Player) The caster enters combat as soon as the spell leaves her hands; the
+	target enters combat on impact. This is most noticable for delayed spells.
+Healing and other such distributed threat is only applied once (i.e. if casted
+    on self and a target it will not be applied twice). Is this applied after
+	all effects are finished?
+Spell reflects are right away, i.e. if reflection happens the spell is not added
+    to the target's queue but reflected right away.
+Resists, dodges, etc, are not added to the queue, but reported immediately.
+Grounding totem is destroyed after the effect that hits it has been processed
+    (yes, this does mean grounding totem can redirect more than one spell).
+Pets are NOT exempt from the rules (bestial wrath is delayed on the pet, dash is
+    instant on the pet).
+Some spells ignore the current rules and are instant no matter what. The ones we
+    know of are: All charges, Shadowstep, Summons
+
+=== CONTENT OF GM POST ===
+I was wondering when this'd get brought up. I've hinted about this in the past
+in a couple interviews... Yes, there was a very significant underlying change
+here, that may have implications for theorycrafting (though minor).
+
+I don't want to get too deep into the under-the-hood workings of WoW servers,
+but here's a super short version. Any action that one unit takes on another
+different unit used to be processed in batches every 400ms. Some very attentive
+people may have noticed that healing yourself would give you the health
+instantly (minus client/server latency), whereas healing another unit would
+incur a delay of between 0ms and 400ms (again, on top of client/server latency).
+Same with damaging, applying auras, interrupting, knocking back, etc.
+
+That delay can feel bad just due to the somewhat laggy responsiveness feeling,
+but also because the state of things can change during that time. For example:
+Holly the Holy Priest is healing Punky the Brewmaster. Punky spikes low, and
+Holly hits Guardian Spirit in a panic. The server verifies that Holly is able
+to cast it, and that Punky is alive (great!). The cast goes off, Guardian Spirit
+goes on cooldown, and a request is placed for the Guardian Spirit aura (that
+prevents dying) to be placed on Punky. That request will be filled next time the
+400ms timer loops, which happens to be 320ms from now. 250ms later, the boss
+lands another hit on on Punky. Punky dies. Sadface. Another 70ms goes by, and
+the Guardian Spirit aura request pops up, and goes "Hey guys, I'm here!...
+Aww... damn, I missed the party. Sadface."
+
+We no longer batch them up like that. We just do it as fast as we can, which
+usually amounts to between 1ms and 10ms later. It took a considerable amount of
+work to get it working that way, but we're very pleased with the results so far;
+the game feels noticeably more responsive.
+
+I can't guarantee that you'll never ever again run into cases where Guardian
+Spirit went on cooldown and the tank still died... but it'll be literally 40x
+rarer than before, and the whole game will feel more responsive too.

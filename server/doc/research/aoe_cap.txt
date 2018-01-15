@@ -1,0 +1,358 @@
+Area of Effect Damage spells cap:
+
+Sources & Quotes
+
+- http://web.archive.org/web/20100317201500/http://forums.worldofwarcraft.com/thread.html?topicId=443123919&sid=1&pageNo=1
+
+	Flamestrike				Targets By	
+
+Rank    Min Mean Max Capped	Min	    Mean	Max     Cap Factor
+
+	1	52	60	68	980		18.85	16.33	14.41	   
+
+	2	96	109	122	1780	18.54	16.33	14.59	
+
+	3	154	173	192	2670	17.34	15.43	13.91	
+
+	4	220	246	272	3660	16.64	14.88	13.46	
+
+	5	291	325	359	4700	16.15	14.46	13.09	
+
+	6	375	417	459	5940	15.84	14.24	12.94	
+
+	7	471	523	575	7830	16.62	14.97	13.62   
+															
+	------------------------------------------------------------------------------------------ 
+
+	Blastwave				Targets By	
+
+	Rank	Min	Mean	Max	Capped	Min	Mean	Max
+
+	1	154	170	186	2470	16.04	14.53	13.28 
+
+	2	201	221	241	3130	15.57	14.16	12.99 
+
+	3	277	303	329	4140	14.95	13.66	12.58 
+
+	4	365	399	433	5250	14.38	13.16	12.12 
+
+	5	462	503	544	6900	14.94	13.72	12.68  
+
+	6	533	580	627	8120	15.23	14	12.95 8120 
+
+	7	616	670	724	9440	15.32	14.09	13.04  
+
+	------------------------------------------------------------------------------------------ 
+
+	Arcane Explosion			Targets By	
+
+	Rank	Min	Mean Max	Capped	Min	Mean	Max
+
+	1	32	34	36	610		19.06	17.94	16.94
+
+	2	57	60	63	1180	20.7	19.67	18.73
+
+	3	97	101	105	1800	18.56	17.82	17.14
+
+	4	139	145	151	2470	17.77	17.03	16.36
+
+	5	186	194	202	3180	17.1	16.39	15.74
+
+	6	243	253	263	4000	16.46	15.81	15.21
+
+	7	306	318	330	5300	17.32	16.67	16.06
+
+	8	377	392	407	6730	17.85	17.17	16.54
+
+
+
+	------------------------------------------------------------------------------------------ 
+
+	Dragon's Breath				Targets By	
+
+	Rank	Min	Mean	Max	Capped	Min	Mean	Max
+
+	1	370	400	430	5370	14.51	13.43	12.49
+
+	2	454	490	526	6470	14.25	13.2	12.3
+
+	3	574	620	666	8470	14.76	13.66	12.72   
+
+	4	680	735	790	10100	14.85	13.74	12.78	
+
+
+
+	------------------------------------------------------------------------------------------ 
+
+	Cone of Cold				Targets By	
+
+	Rank	Min	Mean	Max	Capped	Min	Mean	Max
+
+	1	98	103	108	1650	16.84	16.02	15.28
+
+	2	146	153	160	2350	16.1	15.36	14.69
+
+	3	203	213	223	3160	15.57	14.84	14.17
+
+	4	264	277	290	4000	15.15	14.44	13.79
+
+	5	335	350	365	5120	15.28	14.63	14.03
+
+	6	410	429	448	6500	15.85	15.15	14.51
+
+	
+- http://wow.allakhazam.com/forum.html?forum=243&mid=120519595498664243&h=50
+
+	NEW 2.4 PTR Arcane Explosion (Rank 8): 
+
+	Result 1: 10150 
+	Result 2: 10188 
+	Result 3: 10176 
+	Result 4: 10176 
+
+	Conclusion: Arcane Explosion (Rank 8) has a Damage Cap of around 10173. 
+
+	Blizzard (Rank 7) [WARNING-- I'm not used to Blizzard. I wasn't sure if I got two ticks or one tick in my calculations. It just happens so fast. I'm sorry. This is NOT a very confident test, so DON'T TAKE THIS ONE FOR GRANTED.]: 
+
+	Result 1: 3618 PER TICK. 
+	Result 2: 3600 PER TICK. 
+
+	Conclusion: Blizzard (Rank 7) has a Damage Cap of around 3609 per tick. That means it would be around 28872 damage for the total spell. 
+
+	[WARNING AGAIN-- IT MIGHT BE ONLY HALF OF THAT.] 
+
+	Dragon's Breath (Rank 4): 
+
+	Result 1: 10101 
+	Result 2: 10104 
+	Result 3: 10108 
+	Result 4: 10109 
+
+	Conclusion: Dragon's Breath (Rank 4) has a Damage Cap of around 10106. 
+
+	Flamestrike (Rank 7): 
+
+	Result 1: 7800 DIRECT DAMAGE. 
+	Result 2: 7790 DIRECT DAMAGE. 
+
+	Conclusion: Flamestrike (Rank 7) has a Damage Cap of around 7795 DIRECT DAMAGE. I did not record the DoT damage, because I do not know if that counts as AoE Damage or individual damage (mass apllied), I do not know if that has a cap, if it is affected by spell damage, the DoT is an enigma to me. Lastly, I did not try to record it because my Combat Log window was disabled to recording Periodic Damage, and I was too lazy to change it. ;P 
+
+	Blast Wave (Rank 7): 
+
+	Result 1: 9435 
+	Result 2: 9424 
+	Result 3: 9430 
+
+	Conclusion: Blast Wave (Rank 7) has a damage cap of around 9430. 
+
+	Frost Nova (Rank 5): 
+
+	Result 1: 1575 
+	Result 2: 1581 
+	Result 3: 1596 
+	Result 4: 1584 
+	Result 5: 1599 
+
+	Conclusion: Frost Nova (Rank 5) has a damage cap of around 1587. Because it matters. 
+
+	Frost Nova (Rank 1): 
+
+	Result 1: 235 
+	Result 2: 231 
+
+	Conclusion: Frost Nova (Rank 1) has a damage cap of around 233. I used it, I thought, "Why not include it?" 
+
+	Cone of Cold (Rank 6): 
+
+	I almost forgot about this spell. I realized it just before I was going to bed. So, only one time I used it. I'll be doing more testing later for other ranks, and more for these same ranks because more testing means more correct. 
+
+	Result Only: 6500 
+
+	Conclusion: Cone of Cold (Rank 6) has a damage cap of around 6500. 
+		
+						Mean Cap	Coefficient	Spec Gain 
+	Flamestrike 7		523	7830	0.1761		1.1330 
+	Blastwave 7			670	9440	0.1357		1.1330 
+	Arcane Explosion 8	392	6730	0.1429		1.0300 
+	Dragon's Breath 4	735	10100	0.1357		1.1330 
+	Cone of Cold 6		429	6500	0.1357		1.6139 
+
+
+
+	+Damage to cap at X Targets without gain from spec					 
+						8		9		10		11		12 
+	Flamestrike 7		2588.02	1970.47	1476.43	1072.22	735.38 
+	Blastwave 7			3757.89	2791.81	2018.95	1386.60	859.65 
+	Arcane Explosion 8	3144.75	2490.44	1967.00	1538.73	1181.83 
+	Dragon's Breath 4	3886.84	2853.22	2026.32	1349.76	785.96 
+	Cone of Cold 6		2825.79	2160.58	1628.42	1193.01	830.18 
+
+
+	+Damage to cap at X Targets With Spec Gains					 
+						8		9		10		11		12 
+	Flamestrike 7		1935.59	1390.53	954.49	597.73	300.42 
+	Blastwave 7			2737.24	1884.57	1202.42	644.31	179.21 
+	Arcane Explosion 8	2973.23	2337.98	1829.79	1413.99	1067.49 
+	Dragon's Breath 4	2794.83	1882.54	1152.71	555.57	57.96 
+	Cone of Cold 6		548.61	136.43	-193.32	-463.11	-687.94
+	
+	
+- http://elitistjerks.com/f47/t25902-aoe_spell_cap_mechanics/#Explanation_of_an__quot_AoE_Cap_quot_
+
+	* Paladin - Consecration and
+	* Shaman - Fire Elemental - Fire Nova are uncapped
+	As far as I know, those two are the only spells that are not capped.
+
+	[E]: Mage - Frost Nova: 1600 cap.
+
+	* Mage - Water Elemental - Freeze
+	I have no idea whether this one has a cap and how high it is.
+	Would be great if some frostie could please run into The Stockades to find out
+
+	Not sure if you want to include downranking for snares, but:
+	Frost Nova rank 1 - 230 cap.
+	Blizzard rank 1 - 575 cap per tick, 4600 total.
+
+
+	* Damage Talents and buffs
+	Those have no effect on the AoE damage caps.
+	Examples:
+	Your Arcane Explosion hits 2 mobs for 500, 500.
+	You activate Arcane Power. Your next Arcane Explosion still hits 2 mobs for 500, 500.
+
+	Improved Cone of Cold, Demonic Sacrifice are examples for other common talents that have no effect at the AoE Cap either.
+	* Molten Fury does not affect the cap either, it simply counts as damage buff as well.
+
+
+	* Damage Debuffs like CoE, Stormstrike, Imp. Scorch/Shadow Bolt, Misery, Shadow Vulnerability, etc.
+	Those DO allow you to go beyond the AoE just like crits can.
+	
+	Rain of Fire cap: 6710 per tic
+	Hellfire cap: 5205ish per tic
+	
+- http://elitistjerks.com/f15/t9558-aoe_cap_2_0_3_mage_bugs/
+
+	Last I heard the damage cap for AOE is 10 times the base damage of the spell, any more and the max damage is spread out to however many targets you are hitting.
+
+	Rank 6 Arcane Explosion:
+	4012 
+
+	Rank 5 Blastwave:
+	6945
+
+	Rank 2 Dragon's Breath:
+	6470
+
+	Rank 5 Cone of Cold:
+	5130
+
+	Rank 6 Flamestrike (DoT component seems uncapped):
+	5940
+	
+- http://blue.cardplace.com/newcache/us/47160568.htm
+
+	6. First, it's important to note that we've recently increased the spell damage coefficients on the affected AE spells 
+	(although this might not be in the version on the test realms yet). So, this change explicitly gave us the ability to 
+	improve those coefficients for the "normal" AE case, yet protect the spells against infinitely scaling against more 
+	and more opponents. Our desire is to tune the AE spells so that the damage doesn't cap out until you exceed about 10 targets, 
+	as our AE encounters are actually designed around an assumption of players AE'ing around 10 mobs. Any more than that, 
+	we consider unintended and/or exploitive. So, we're probably going to be bumping up the damage caps a bit to account 
+	for the now stronger effects of +damage gear and our desire for players to be able to AE around 10 targets without really 
+	feeling the effect of the damage caps. 
+	
+- http://elitistjerks.com/f75/t18441-sweet_informational_thread/
+
+	Flamestrike
+	Rank	Capped
+	1	980
+	2	1780
+	3	2670
+	4	3660
+	5	4700
+	6	5940
+	7	7830
+	
+	Blastwave
+	Rank	Capped
+	1	2470
+	2	3130
+	3	4140
+	4	5250
+	5	6900
+	6	8120
+	7	9440
+	
+	Dragon's Breath
+	Rank	Capped
+	1	5370
+	2	6470
+	3	8470
+	4	10100
+	
+	Arcane Explosion
+	Rank	Capped	
+	1	610
+	2	1180
+	3	1800
+	4	2470
+	5	3180
+	6	4000
+	7	5300
+	8	6730
+	
+	Cone of Cold
+	Rank	Capped
+	1	1650
+	2	2350
+	3	3160
+	4	4000
+	5	5120
+	6	6500
+	
+- http://elitistjerks.com/f47/t19038-spell_coefficients/
+
+	AoE caps
+
+	That's not strictly about spell damage coeffiecients, but still nice to know when your spell damage does nothing at all due to AoE damage caps.
+
+	Arcane Explosion (rank 8): 10100
+
+	Flamestrike DD (rank 7): 7830
+	Blastwave (rank 7): 9440
+	Dragon's Breath (rnk 4): 10100
+
+	Cone of Cold (rank 6): 6500
+	Blizzard (rank 7): 28950 (3620 per tick)
+
+	Warlocks
+	Seed of Corruption (rank 1): 13580
+
+	
+	Magma Totem: 6.7% per tick (67% total)
+	(from 97 to 157)
+	Magma Totem has an AoE cap of 1550 per tick, 15.500 total.
+
+	Fire Nova Totem: 21.4% on impact
+	(Base 654-730. To 853-918. Makes an increase of 188-199, fits the 21.4 which is the coffecient for instant AoE)
+	Fire Nova Totem has an AoE cap of 9970.
+	
+- http://elitistjerks.com/f80/t17008-pve_raiding_compendium/
+
+	Seed of Corruption provides the highest dps for any spec and any gear quality, by a large margin. This is of course assuming you're not getting interrupted and hitting more than one target.
+
+	Hellfire is a bit lower dps, but a lot more mana efficient (although not health efficient, you will require more healing than with SoC + lifetap). Despite the lower damage throughput it still has its uses, especially for destruction warlocks that benefit from the threat reduction on it. It can also be used to instantly blow up Seed of Corruption. 
+
+	Rain of Fire has received a boost, and is a low risk, mana efficient, ranged aoe spell now. Unfortunately its damage is nowhere near competitive with either Hellfire or SoC.
+
+	Aoe cap: if your seed of corruption detonates for more than 13580 on all targets combined, it will do less damage. When this happens, the detonation damage will be scaled down so that the total is 13580. This reduction is done after calculating +damage gear, talents and buffs so it is the same for every gear and spec. 
+
+	Example, if you hit 10 targets with SoC detonation, you will hit each for 1358. 
+
+
+	Some multipliers (crits, CoS, etc) are not affected and will allow you to hit individual targets for more.
+
+	Example: SoC hitting 10 targets will hit each for 1358, but crits will be 1358x1.5.
+
+
+	For completeness: Hellfire caps at 5200 per tic, and RoF at 6710 per tic. You hit this at around 10 targets.
+    

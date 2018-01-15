@@ -1,0 +1,21 @@
+-- check README.SQL-COMPACT before dumping files, you'll need it
+
+-- how to create a realm:
+INSERT INTO realmd.realmlist (name, address, port, realmbuilds) VALUES("mangos", "127.0.0.1", "8085", "8606");
+
+-- how to create an account:
+INSERT INTO realmd.account (username, sha_pass_hash, gmlevel, expansion) VALUES("USER", SHA1("USER:PASSWORD"), 3, 1);
+
+-- dumping characters and realm structures only, not data
+mysqldump -d --skip-comments --routines -u username -p characters > characters.sql
+mysqldump -d --skip-comments --routines -u username -p realmd > realmd.sql
+
+-- dumping db version tables for realm and characters
+mysqldump -u username -p --skip-comments --skip-extended-insert characters character_db_version > characters_db_version.sql
+mysqldump -u username -p --skip-comments --skip-extended-insert realmd realmd_db_version > realmd_db_version.sql
+
+-- dumping world:
+mysqldump --skip-comments --skip-extended-insert --routines -u username -p world | ./sql-compact > world.sql
+
+-- dumping scriptdev2:
+mysqldump --skip-comments --skip-extended-insert --routines -u username -p scriptdev2 | ./sql-compact > scriptdev2.sql

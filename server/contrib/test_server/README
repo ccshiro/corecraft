@@ -1,0 +1,12 @@
+Requirements:
+Python 3
+PyMySQL (https://github.com/PyMySQL/PyMySQL/)
+
+Get PyMySQL like this:
+sudo apt-get install python3-pip
+sudo pip-3.2 install PyMySQL
+
+Steps:
+1. cd server/contrib/test_server/
+2. python3.2 setup.py [-u USER] [-p PWD] [--port PORT] mysqlhostname database
+3. rebuild the server

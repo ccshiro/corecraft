@@ -1,0 +1,29 @@
+The style/coding guidelines can be found in "GUIDELINES".
+
+When committing new code or bug changes, make sure you follow the
+following process.
+
+1) Make sure your code follows the rules in "GUIDELINES".
+2) Assert that the code compiles without warnings. Both in the latest
+   gcc and clang.
+3) Run clang-format.
+   Point your terminal to the top-level source directory. And type:
+   git diff -U0 HEAD^ | clang-format-diff.py -i -p1 -style=file
+4) Run contrib/sort_includes.py
+   Point your terminal to the top-level source directory. And type:
+   git diff --name-only --diff-filter=MA | python3 contrib/sort_includes.py
+5) Write a commit message with a short summary (<72 characters), and
+   a following description for the problem and the solution. Patches
+   should be written in present tense. The summary should include a
+   short note on which part of the system it modifies.
+   An example commit message:
+   
+   "
+   Battlegrounds: Apply formatting style
+   
+   Most of the battleground system predates our formatting style change
+   and as such need to be updated.
+   
+   Update the formatting of Battlegrounds. Apply our style using
+   clang-format.
+   "

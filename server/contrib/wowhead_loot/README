@@ -1,0 +1,26 @@
+The purpose of this tool is to give it a list of item IDs and have it query
+wowhead.com for you, and look at the "Dropped By" tab and extract the
+information needed to build INSERT queries into mango's creature_loot_template
+database.
+
+How to use:
+1. Create a file called "input" and fill it with an item id per line, for
+example (the file needs to be in the same directory as the .py script):
+2589
+2592
+4306
+
+2. Launch the script and wait for it to finish, like such:
+python wowhead_loot.py
+
+What the output is:
+There will be 3 files created (query.sql, warnings, failed), the files contain:
+query.sql: an sql file you can run to insert the data into mangos' world DB
+failed:    a file with the same structure as input, listing all item ids that
+           had no Dropped By column
+warnings:  a file with warnings, listing line numbers in query.sql as well as
+           what looks odd with that specific query. warnings should be manually
+           looked at before query.sql is imported into the database
+
+           
+Tested with python 2.7.3.

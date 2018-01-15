@@ -1,0 +1,110 @@
+# Steps to setup test server with local compile
+
+# 1. Update system
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test &&
+sudo apt-get update && sudo apt-get upgrade && sudo reboot
+
+# 2. Install packages
+sudo apt-get install tmux g++-4.9 git subversion mysql-server mysql-client gdb \
+libboost1.55-all-dev libmysql++-dev libssl-dev libbz2-dev libjemalloc-dev \
+python3 python3-pip && \
+sudo pip3 install PyMySQL
+
+# 3. Make dirs
+mkdir data && \
+mkdir TEST_BINARIES && cd TEST_BINARIES && \
+mkdir install_debug && mkdir install
+
+# 4. Create Users
+# Modify sudo line to: ...=(ALL) NOPASSWD:ALL
+useradd -m -b/bin/bash shiro && useradd -a -G sudo shiro && visudo
+
+# 5. Setup ssh key
+# COPY SSH KEY MANUALLY & VERIFY IT WORKS & THAT YOU CAN SUDO
+# EDIT /etc/ssh/sshd_config:
+PermitRootLogin no
+PasswordAuthentication no
+# RUN:
+service ssh restart
+
+IP="51.255.39.242"
+
+# 6. Scp stuff
+cd ~/code/cc && \
+scp database/sql/world.sql shiro@$IP:~ && \
+scp dec-characters.sql shiro@$IP:~/characters.sql && \
+scp dec-realm.sql shiro@$IP:~/realm.sql && \
+scp database/sql/scriptdev2.sql shiro@$IP:~/scriptdev2.sql && \
+scp -r install/maps shiro@$IP:~/data/ && \
+scp -r install/vmaps shiro@$IP:~/data/ && \
+scp -r install/mmaps shiro@$IP:~/data/ && \
+scp -r install/dbc shiro@$IP:~/data/ && \
+scp -r src/contrib/test_server/data.sql shiro@$IP:~
+
+# 7. LOCAL: Run test script
+cd ~/code/cc/src/contrib/test_server && \
+python3 setup.py -u root -p password 127.0.0.1 world && cd ~
+# UPDATE data.sql REMOTE with the output entry & guid
+
+# 8. LOCAL: Start compile for release
+cd ~/code/cc && rm -r build_release/ && \
+mkdir build_release && cd build_release && \
+cmake ../src -DCMAKE_INSTALL_PREFIX=/home/shiro/TEST_BINARIES/install/ -DENABLED_OPTIMIZED=1 && \
+make -j5 install && cd ~
+
+# 9. LOCAL: Once release build finihses, start compile for debug
+cd ~/code/cc && rm -r build_debug/ && \
+mkdir build_debug && cd build_debug && \
+cmake ../src -DCMAKE_INSTALL_PREFIX=/home/shiro/TEST_BINARIES/install_debug -DENABLED_OPTIMIZED=0 && \
+make -j5 install && cd ~
+
+# 10. LOCAL: Scp the binaries and configs
+cd ~/TEST_BINARIES && \
+scp -r install shiro@$IP:~/TEST_BINARIES && \
+scp -r install_debug shiro@$IP:~/TEST_BINARIES
+
+# 11. Set up database
+echo "create database world; create database characters; \
+create database realm; create database scriptdev2" | mysql -u root -ppassword && \
+mysql -u root -ppassword world < world.sql && \
+mysql -u root -ppassword characters < characters.sql && \
+mysql -u root -ppassword realm < realm.sql && \
+mysql -u root -ppassword scriptdev2 < scriptdev2.sql
+
+# 12. REMOTE: Import the test script data
+cd ~ && \
+mysql -u root -ppassword world < data.sql
+
+# 13. REMOTE: Set up configs
+cd ~/TEST_BINARIES/install/etc && mv mangosd.conf.dist mangosd.conf && \
+mv realmd.conf.dist realmd.conf && \
+mv scriptdev2.conf.dist scriptdev2.conf && \
+sed -i -e 's/mangos;mangos;realmd/root;password;realm/' \
+    -e 's/mangos;mangos;mangos/root;password;world/' \
+    -e 's/mangos;mangos;characters/root;password;characters/' \
+    -e 's/PlayerLimit = 100/PlayerLimit = 500/' \
+    -e 's/Concurrency.UsePathgenThread = 0/Concurrency.UsePathgenThread = 1/' \
+    -e 's/SkipCinematics = 0/SkipCinematics = 1/' \
+    -e 's/SkipCinematics = 0/SkipCinematics = 1/' \
+    -e 's/StrictPlayerNames = 0/StrictPlayerNames = 1/' \
+    -e 's/StrictCharterNames = 0/StrictCharterNames = 1/' \
+    -e 's/StrictPetNames = 0/StrictPetNames = 1/' \
+    -e 's/DataDir = "."/DataDir = "..\/..\/data\/"/' \
+    -e 's/LoadDataOnStartup = 0/LoadDataOnStartup = 1/' \
+    -e 's/AllowTwoSide.Accounts = 0/AllowTwoSide.Accounts = 1/' \
+    -e 's/MaxCoreStuckTime = 0/MaxCoreStuckTime = 30/' \
+    -e 's/AntiCheat.KickEnabled = 1/AntiCheat.KickEnabled = 0/' \
+    mangosd.conf && \
+sed -i -e 's/mangos;mangos;realmd/root;password;realm/' realmd.conf && \
+sed -i -e 's/mangos;mangos;scriptdev2/root;password;scriptdev2/' scriptdev2.conf && \
+cp mangosd.conf ~/TEST_BINARIES/install_debug/etc/ && cp realmd.conf ~/TEST_BINARIES/install_debug/etc/ && \
+cp scriptdev2.conf ~/TEST_BINARIES/install_debug/etc/ && cd ~
+
+# 15. Update realmlist
+echo "UPDATE realmlist SET address='$IP'" | mysql -u root -ppassword realm
+
+# 16. Run server
+export LC_ALL="en_US.UTF-8"
+ulimit -c unlimited
+./run-mangos
+

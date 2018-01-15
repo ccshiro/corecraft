@@ -1,0 +1,129 @@
+Table of Contents:
+1. Facts about stealth
+2. Derivations
+3. Notes about expansion
+4. Stealth points and detection points
+5. Conclusion and resulting formula
+6. What remains to be done
+
+1. Facts about stealth
+- One level is equal to 5 stealth points (source: Nightscape Boots).
+- On retail (5.4) stealth ranges (with no modifier except for stealth):
+NOTE: All of these distances are derived by memory reading, and are
+      point-to-point, i.e. no bounding radius included.
+  Same level: 4.5 yards detection (tried with level 5 and level 90).
+  Stealther 1 level above: 3 yards detection (tried with level 4 and 5).
+  Stealther 2,3,4,5 levels above: 1.5 yards detection (tried with level 85 and
+      90, and then level 1,2,3 and level 5).
+  Stealther 5 levels below: 16.5 yards detection (tried with level 85 and 90).
+  Stealther 10 levels below: 19.5 yards detection (tried with level 80 and 90).
+  Stealther 15 levels below: 27 yards detection (tried with level 5 and 20).
+  Stealther 65 levels below: 30 yards detection (tried with level 5 and 70).
+  Stealther 85 levels below: 30 yards detection (tried with level 5 and 90).
+Shadowmeld range on retail is 9 yards for equal level targets (trid with level
+    60 and 60).
+  If someone is behind you (180 degrees arc) they cannot be detected (source:
+      retail)
+  If you're within 1.5 yards you can see the target NO MATTER WHAT, even if
+  he's behind you.
+  
+2. Derivations
+NOTE: These derivations apply for PLAYER stealth, mobs have stealths that are
+more powerful.
+- Dist < 1.5 ? Always visible. Dist > 30 ? Never visible.
+- let a be the stealthed rogue's level, and b the level of the player looking at
+  him, then the detection range for the rogue to be seen by the other guy is:
+  dist = 4.5 + (b - a) * (1.5/5) ; limited to range [1.5,30]
+
+3. Notes about expansion
+In 5.4 (which the data and derivations is based on) there is no Master of
+Deception. We know that MoD rank 5 increases your stealth level by 3 (the aura
+gives +15 stealth points). If we assume that when MoD was removed the formula
+was brought down 3 levels to compensate for that (which seems a possible route),
+then the 4.5 yards for equal level would've been 9 yards.
+
+If we assume that is true, then the formula for detection would be (ignoring
+modifiers besides level):
+
+dist = 9 + (b - a) * (1.5/5) ; limited to range [1.5,30]
+
+Where a is the level of the rogue and b of the on-looker.
+
+This is backed up by the shadowmeld range on retail, see point 1. We think this
+means that rogues got the rank 5 MoD effect by default.
+
+4. Stealth points and detection points
+A player has stealth points and detection points. The detection points explain
+how potent the player is in detecting stealth. The stealth points explain how
+potent the player's current stealth is. Their base formulas are:
+
+stealth points = 0
+detection points = level * 5
+
+SPELL_AURA_MOD_STEALTH (16)
+This aura define your base stealth points. Without this aura type your stealth
+points are always 0, no matter if you have a SPELL_AURA_MOD_STEALTH_LEVEL or
+not.
+
+SPELL_AURA_MOD_STEALTH_LEVEL (154)
+This aura type adds a flat modifier to your stealth points.
+
+SPELL_AURA_MOD_STEALTH_DETECT (17) WARNING: Only applies if misc == 0,
+                                            (1 == trap detection)
+This aura adds a flat modifier to your detection points.
+
+Some interesting SPELL_AURA_MOD_STEALTH and their stealth points:
+Stealth rank 1 (level 1 spell): 5 + level * 5
+Stealth rank 2 (level 20 spell): 100 + level * 5
+Stealth rank 3 (level 40 spell): 200 + level * 5
+Stealth rank 4 (level 60 spell): 300 + level * 5
+Prowl rank 1 (level 20 spell): 100 + level * 5
+Prowl rank 2 (level 20 spell): 200 + level * 5
+Prowl rank 3 (level 20 spell): 300 + level * 5
+Shadowmeld (level 0 spell): 0 + level * 5
+
+5. Conclusion and resulting formula
+If we ignore the constant of the stealth spells for a moment, the formula
+becomes:
+
+Let s be stealth points, d detection points, and y the detection distance in
+yards then y is defined as:
+
+y = 9 + (d - s) * (1.5/5)
+
+Where y is in the range: [1.5,30].
+
+If we introduce the constant of the stealth spell, however, the formula becomes
+ill-formed. Ergo, one of the possibilites must be the case:
+
+1) The stealth value constant is irrelevant and all SPELL_AURA_MOD_STEALTH have
+   the same strength.
+2) The constant is expected to be transformed somehow. For example, 100 might
+   indicate 10.0, and so on. This would not be the first time a base point is
+   offset by an order of magnitude to achieve precision in an integer number.
+   SPELL_EFFECT_ENERGIZE does this for example, where the actual gained
+   mana/rage/etc is base_points/10.
+
+Given that shadowmeld is 9 yards on retail, it would seem that at least
+currently that offset is ignored. This doesn't mean it actually should be, but
+for now we will assume that, since with that value the formula becomes
+ill-formed.
+
+6. What remains to be done
+The most important thing from here on is figuring out the update timer of
+stealth, which was harder than it sounds (the result is very inconsistent).
+We tried by writing an addon that listens to the PLAYER_TARGET_CHANGED event.
+Using that addon one of us turned towards the stealthed target and spam tabbed,
+as soon as he got target on the player, he turned away again. We reasoned that
+this should reveal the update timer quite consistently, and in a normalized
+fashion. We were wrong. We then reasoned that maybe the timer is seconds
+precision such as:
+next_dection = time(0) + 4;
+But we remain unconvinced about that, and leave the research for the future.
+
+Another thing is determing the purpose of the flat offset on stealth auras.
+Our current theory is that they're a left-over from some early stage of the
+game. For example, maybe using a level 60 stealth would always consider you
+level 60, a level 40 stealth always level 40, and so on. In other words, maybe
+there was no per level points. This should be determinable by looking at early
+DBC data (such as the WoW alpha).

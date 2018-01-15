@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Check so we're in the right dir
+if [ ! -d "bin" ]; then
+    echo "Error: must be in the install directory, where ./bin exists"
+    exit
+fi
+
+# Check if binary is newer than that of current core dumps
+if [ -d "./cores" -a -f "./cores/mangosd" ]; then
+    A=($(md5sum -b ./bin/mangosd))
+    B=($(md5sum -b ./cores/mangosd))
+    if [ "$A" != "$B" ]; then
+        echo "Error: ./bin/mangosd is different from ./cores/mangosd; remove ./cores to proceed"
+        exit
+    else
+        echo "Binaries ./bin/mangosd and ./cores/mangosd are equal"
+    fi
+fi
+
+# Create ./cores
+if [ ! -d "cores" ]; then
+    echo "Made directory ./cores"
+    mkdir "cores"
+fi
+
+# Copy mangosd if needed
+if [ ! -f "./cores/mangosd" ]; then
+    echo "Copying ./bin/mangosd to ./cores/mangosd"
+    cp ./bin/mangosd ./cores/mangosd
+fi
+
+echo "Everything looks ok, starting ./bin/mangosd in 5 seconds..."
+echo "You can find saved crash dumps and associated mangosd in ./cores"
+sleep 5
+
+# Run mangosd, saving any core dumps we get
+while true; do
+    ./bin/mangosd
+    if [ -f "core" ]; then
+        echo "Server crashed, saving gziped core dump. This might take a while..."
+        gzip -1 core
+        mv core.gz cores/core.$(date -u +%s).gz
+    fi
+done

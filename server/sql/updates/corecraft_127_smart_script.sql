@@ -1,0 +1,3 @@
+-- world
+ALTER TABLE smart_scripts
+MODIFY COLUMN event_flags INT UNSIGNED NOT NULL DEFAULT 0;

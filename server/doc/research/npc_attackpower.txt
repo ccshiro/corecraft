@@ -1,0 +1,183 @@
+Written by Barroth
+
+Sources & quotes:
+http://elitistjerks.com/f31/t10509-curse_weakness/p2/#post340903
+
+(Test was done on Uvuros - level 70 elite quest mob in Shadowmoon Valley.)
+
+Base Damage: ----------------------------- 2272-3214 --------- Average: 2743
+Screech (-210ap): ------------------------ 2002-2944 --------- Average: 2473 [-9.84%]
+Demoralizing Roar (-248ap): -------------- 1953-2895 --------- Average: 2424 [-11.63%]
+Improved Demoralizing Roar (-347ap): ----- 1881-2823 --------- Average: 2352 [-14.25%]
+Screech + Demoralizing Roar: ------------- 1881-2823 --------- Average: 2352 [-14.25%]
+Screech + Improved Demoralizing Roar: -----1881-2823 --------- Average: 2352 [-14.25%]
+This goes in line with the results from some less intensive testing on a regular level 70 and a regular level 73 mob indicating a maximum reduction of ~14.4% with stacked Demo Roar and Screech - CoW(-350ap) alone yielded the same damage reduction.
+
+I hope there's a flaw in my experiment and no hardcap of ~300ap reduction as this would render Improved CoW or Imp. Demo Shout/Roar useless of pve.
+
+http://elitistjerks.com/f31/t10509-curse_weakness/p3/#post342118
+
+Base Damage: 345-489 (level 73) -------- 417 Reduced Damage: 285-429 (CoW -350) -------- 357 [-14.39%]
+
+http://elitistjerks.com/f31/t10509-curse_weakness/p3/#post344651
+
+The Lurker Below, lvl 73 elite boss Base Damage: 11948-16895 Demo Shout (-300AP): 9920-14817 (-14.24%) Imp Demo Shout (-420AP): 9792-14696 (-15.1%)
+
+http://elitistjerks.com/f31/t10509-curse_weakness/p4/#post522500
+
+Target: lvl 71 aether-ray
+
+257-356 cor 5 (+135) 251-350 cor 4 (+90) 247-346 cor 3 (+65) 244-344 cor 2 (+45) 241-340 cor 1 (+20) 238-337 base dmg 235-334 cow 1 (-21) 232-331 cow 2 (-41) 229-328 cow 3 (-64) 226-325 cow 4 (-82) 220-320 cow 5 (-123) 214-314 cow 6 (-163) 201-300 cow 7 (-257) 196-296 cow 8 (-350) 287,5 http://elitistjerks.com/f31/t10509-curse_weakness/p4/#post591313
+
+Lv70 Uvuros AP Min Max Range 0 2272 3214 942 -210 2002 2944 942 -248 1953 2895 942 -347 1881 2823 942
+
+-210 = 2743 2473 = 9,84% reduce -248 = 11,62% reduce -304 = 14,24% -347 = 14.25%
+
+Lv71 Aether Ray 
+AP Min Max Range 135 257 356 99 90 251 350 99 65 247 346 99 45 244 344 100 20 241 340 99 0 238 337 99 -21 235 334 99 -41 232 331 99 -64 229 328 99 -82 226 325 99 -123 220 320 100 -163 214 314 100 -257 201 300 99 -350 196 296 100 0 avg = 287,5
+
+-64=278,5= -3,13% ->1 ap = 0,049%
+
+-123=270= -6,08% -> 1 ap = 0,049%
+
++135 = +6,61% -> 1 ap = 0,049% -> Apparently gaining additional attackpower scales the same as reducing attackpower
+
+-257=250,5= -12,87% -> 1 ap = 0,05%
+
+-350 = 246= -14,44% -> 1 ap = 0,041% -> Since other values are linear its safe to assume that the attackpower cap was reached, so thats why the percentage is lower.
+
+Lv73 Scorpid 
+AP Min Max Range 0 345 489 144 -300 289 433 144 -350 285 429 144 ->320 ap
+
+avg 417 -300 13,43% -350 14,25%
+
+Lurker (Leita)
+
+AP Min Max Range 0 11948 16895 4947 -210 10068 14768 4700 -300 9519 14218 4699 -510 9397 14096 4699
+
+Lurker (Dots)
+
+AP Min Max Range 0 11948 16895 4947 -300 9920 14817 4897 -420 9792 14696 4904
+
+AP Min Max Range 0 11948 16895 4947 -300 9920 14817 4897 -420 9792 14696 4904 avg = 14421,5 
+-300 avg = 12493,43434343434 = 13,37% -320 = 14.25% -420 avg = 12367,67676767677 = 14,24%
+
+http://elitistjerks.com/f31/t10509-curse_weakness/p5/#post714209
+
+What we know!
+
+Maximum Attack Power Reduction on Raid Bosses: 340AP
+
+Roar, Demoralizing Shout & Curse of Weakness DONT Stack Screech (Owl/Bat Hunter Pet) is the ONLY AP Reducement Ability that does stack with the above
+
+Attack Power Reduction from Roar: 240AP Attack Power Reduction from Demoralizing Shout 0/5: 300AP Attack Power Reduction from Demoralizing Shout 2/5: 348AP Attack Power Reduction from Demoralizing Shout 5/5: 420AP Attack Power Reduction from Curse of Weakness 0/2: 350AP Attack Power Reduction from Screech (Rank 5): 210AP
+
+Attack Power Increase from Curse of Recklessness: 135AP
+
+What can we make from this!
+
+A Raid Boss Without Curse of Recklessness has: 340AP - Debuffed with 0/5 Demoralizing Shout: 40AP - Debuffed with 2/5 Demoralizing Shout: 0AP - Debuffed with 5/5 Demoralizing Shout: 0AP - Debuffed with Roar: 100AP - Debuffed with 0/2 Curse of Weakness: 0AP
+
+A Raid Boss with the Debuff Curse of Recklessness has: 475AP - Debuffed with 0/5 Demoralizing Shout: 165AP (With Screech: 0AP) - Debuffed with 2/5 Demoralizing Shout: 117AP (With Screech: 0AP) - Debuffed with 5/5 Demoralizing Shout: 55AP (With Screech: 0AP) - Debuffed with Roar: 235AP (With Screech: 20AP) - Debuffed with 0/2 Curse of Weakness: 125AP (With Screech: 0AP)
+
+Synopsis
+
+When we have a hunter with a Owl or Bat pet with Screech (Rank 5) Curse of Recklessness can be used safely on ALL bosses while still getting the MAXIMUM Attack Power Reduction Possible (Exempt: Roar)
+
+When we do NOT have a hunter with a Owl or Bat pet with Screech (Rank 5) Curse of Recklessness can be used safely on most bosses depending on if we have a warrior with 5/5 imp ds or not. Bosses we do NOT want to use CoR on currently are: Archimonde, Azgalor, Mother Shahraz and Illidan, Reliquary of Sould (Phase 1). Bosses we should NOT use CoR on when we do not have 5/5 Demo Shout are: Teron Gorefiend
+
+Lurker below:
+
+Damage Range ShadowEmbrace -Attack Power
+11984-16895 0/5 0 
+10068-14768 5/5 -210 (bat pet screech) 9519-14218 5/5 -300 (non-talented demo shout) 9397-14096 5/5 -510 (demo + screech) And by Beast Lore on the Lurker below with 1/5 Shadow Embrace 11948-16895 0/5 0 9920-14817 1/5 -300 (non-talented demo) 9792-14696 1/5 -420 (talented demo)
+
+http://www.wowwiki.com/Demoralizing_Shout?oldid=1299939
+
+Many players do not realize that NPCs use different AP scales than players. While players gain 1 DPS per 14 AP at all levels, NPCs do not. Lv60 elites have been tested to gain about 1 DPS per 2 AP; this means NPCs are affected much more strongly by changes to their AP. For stronger encounters (such as raid bosses), the testing indicates that they have a similar amount of AP, but their damage scales up significantly faster! When you consider many bosses have attacks that deal a multiple of their normal damage, then the stacking effect of AP becomes very apparent. For example:
+
+Magmadar: Normal: 1867 - 2476 damage. W/ demo: 1512 - 2121 damage. (-16.3%) Maexxna: Normal: 5491 - 7281 damage. With demo: 4448 - 6238 damage. (-16.3%)
+
+For most level 60 encounters, the observed AP value appears to be ~300 AP. Also, the damage contribution from that AP is ~30% of the NPC's total melee damage. This implies that reducing the NPC's Attack Power to zero will reduce their melee damage by ~30%. So on those encounters, you should apply Demoralizing Shout and Screech, to fully debuff the target's AP.
+
+For level 70 encounters, preliminary testing has shown that the AP value has not increased drastically (~340 AP). However, the damage contribution appears to have decreased, to around 15% of the NPC's total melee damage. This range is consistent with Beast Lore results for testing the effects of modifying the AP of NPCs:
+
+http://www.wowwiki.com/Improved_Demoralizing_Shout?oldid=1400942
+
+A fully improved (5/5) Demoralizing Shout will reduce enemy Attack Power by 420 at Rank 7, instead of 300 with no talent. This works out to be over 8.5 DPS reduction of physical attacks on any enemy players affected, compared with an untalented shout. (See Attack Power for details) This talent is considerably more useful than Booming Voice, in that it makes the shout more powerful, without making it harder to control. It is particularly helpful in group-based melee furballs, and for long-duration boss fights where the more status effects, the better. (Bosses will also have a larger DPS reduction, as NPC AP affects their total DPS more.)
+
+It should be noted that only two ranks (2/5) effectively work against bosses, unless the boss is afflicted with Curse of Recklessness, in which case all five ranks (5/5) are effective.
+
+http://elitistjerks.com/f15/t7058-demoralizing_shout_et_al/
+
+(Vanilla) Demoralizing shout and screech stack. Up to the 30% cap that is. I guess this was obvious already (since the two icons stack), but since I've never seen someone suggest screech or really demo shout for any of the "I'm getting one-shotted" threads (other than emps), I guess it's not something widely known.
+
+Imp demoralizing shout is pretty huge. The -atk effects are linear (I tested this when testing the interpolation method), which means the dps loss is sizeable on any mob in which the cap does not play a role. For example a mob with 18% reduction via demo would have a 25% reduction with imp demo, that's kinda a big difference. I guess we knew this too, but again, not terribly widely known.
+
+http://elitistjerks.com/f15/t7058-demoralizing_shout_et_al/p2/#post215928
+
+(Vanilla) Also the data does seem to imply that as the creature level increases the smaller the base reduction % of demo shout. So lvl 60s from the OP were 24% ish which Maex/Mag at level 63 were both 16%.
+
+http://web.archive.org/web/20080623003011/http://forums.worldofwarcraft.com/thread.html?topicId=102782410
+
+Essentially, if the NPC does not have more than 300 AP to start with, the additional reduction from the talent is wasted. The concern is that most NPCs seem to only have 300 AP, or slightly more.
+
+I did some basic testing on 2007.05.08, for determining how much damage reduction is provided by AP debuffs (Demo Shout, Demo Roar). I've found that a 248 AP debuff reduced damage by 11.2%, while a 420 AP debuff reduced damage by 15.2%. Others have mentioned that the untalented 300 AP reduction of Demo Shout is providing ~14% reduction (see the Beast Lore results from both Ikajo and Dots, in the EJ thread).
+
+If this NPC's AP value is average, it indicates that the bonus from Improved Demoralizing Shout is providing minimal/no benefit for most encounters, due to NPCs not having sufficient AP values to debuff.
+
+A talent spec with 2/5 Imp Demo Shout would be enough to remove all available AP from even lv73 NPCs, if the data is representative of normal encounters.
+
+Data
+Druid avg damage taken:
+
+no AP debuff: 101 hits -> 325.1 (1032.1 base)
+
+-248 AP debuff: 135 hits -> 288.6 ( 916.2 base)
+
+debuff reduction: 36.5 (115.9 base) = 11.2%
+
+Warrior avg damage taken:
+
+no AP debuff: 79 hits -> 514.4 ( 976.1 base)
+
+-420 AP debuff: 73 hits -> 436.1 ( 827.5 base)
+
+debuff reduction: 78.3 (148.6 base) = 15.2%
+
+Analysis:
+Assuming the AP damage reduction is linear, this NPC's damage is reduced by 1% for every 22 AP. With a base damage of ~1000, this NPC's damage/AP ratio is 1 damage for ~2.2 AP. The DPS/AP ratio is not determined, since I did not measure the NPC's swing time.
+
+If the above values are accurate, the NPC has around 334 AP to start with. The additional 90 AP reduction from 5/5 Improved Demo Shout does not appear to be useful here. If this NPC is an average encounter, it would indicate that 2/5 Imp Demo Shout (-348 AP) is enough to remove all available AP from NPCs of this level.
+
+For raid encounters: the 15.2% reduction I observed through damage testing is very close to the 15.1% as reported by Dots (EJ thread), when using Beast Lore on The Lurker Below. This suggests that AP values are not increasing much at all from lv69 elites to lv73 bosses. This indicates that 2/5 Imp Demo Shout is sufficient at the raid level, as well.
+
+There are some special cases where AP reduction beyond baseline might be worthwhile. Certain encounters could have NPCs with extra AP (either base, or through buffs during the fight). It could also be used to avoid the drawback of using Curse of Recklessness to boost damage to the target. If your party/raid is interested in either of those scenarios, then 5/5 Imp Demo Shout (or Imp Curse of Weakness) may be worthwhile to keep.
+
+http://www.wowwiki.com/Screech?oldid=1464795
+
+This ability is highly important in End Game raids, though underappreciated. It can cut some 8% of the melee damage that a level 73 boss can inflict on the tank. It's aoe nature makes this ability shine when trying to alleviate the role of palas when multi-tanking. In "End Game Raids" this ability can be powerful.
+
+http://www.wowwiki.com/Attack_power?oldid=1555311
+
+(Vanilla, 30%) Mob attack power Mobs have different attack power formulas than players. Damage done per second of mobs is given by: (Damage_from_AttackPower + Base_Weapon_Damage) * Multiplier. For most mobs, attack power is about 30% of total damage; bosses have higher multiplier than trash mobs. That means -Attack Power debuffs have significant effect on raid mobs. Some tests suggest Improved Demoralizing Shout could reduce the damage taken from a level 60 mob by 25%. Thus Curse of Recklessness will increase the damage done of affected mob drastically. The -AP debuff is capped at -30% total damage effect, as the formula suggests.
+
+http://web.archive.org/web/20081202093158/http://www.tankspot.com/forums/theory-articles-guides/32832-brief-primer-attack-power.html
+
+2/5 Improved Demo Shout will negate all of a mob's attack power.
+Curse of Weakness will negate all of a mob's attack power.
+3/5, 4/5, and 5/5 Improved Demo Shout have no additional affect over 2/5 Improved Demo Shout, provided the absence of any other AP-adjusting debuffs.
+This indicates that the max amount of removable AP on a mob is somewhere around 340.
+
+The Original AP Thread Some of the Original AP numbers in BC
+
+This also means that a Druid must spec 5/5 into Feral Aggression to achieve the max AP reduction from Demoralizing Roar.
+
+Demoralizing Roar, Demoralizing Shout, and Curse of Weakness do not stack with each other, and will push each other off, depending on which one is more effective.
+
+Curse of Recklessness + Curse of Weakness (or 2/5 Improved Demo Shout, or 5/5 Demo Roar) leaves approximately 125 AP left on a mob.
+
+Curse of Recklessness + 5/5 Improved Demo Shout leaves approximately 55 AP left on a mob.
+Finally, an Owl pet's Screech ability stacks with all other AP-reducing abilities. This is the only way to remove all a mob's AP while Curse of Recklessness is up.
+
+What's at stake? The mechanics for mob AP are significantly different from player AP. Player characters gain 1 DPS from 14 AP. Bosses are somewhat more variable, and it's hard to tie specific numbers to AP (though 1 DPS to 2 AP has been suggested). More accurately, a mob's removable attack power amounts to about 15% of their total damage output. A s per this thread cited above, there is probably some sort of flat DPS > AP conversion, because the same debuffs on different mobs provide slightly different numbers, but they are all very close to each other. Proposed ranges for the actual reduction achieved by negating all negatable AP fall in the 14.5%-18% range.

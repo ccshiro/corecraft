@@ -1,0 +1,39 @@
+WFD -- WoW Freeze Detector
+
+README
+    A small tool to help you figure out what packets the server sent that causes
+    the client to freeze up and stop responding.
+    
+AUTHORS
+    shiro -- contactable at #corecraft @ irc.tddirc.net
+    
+INSTALL
+    Setup the following dependencies:
+        Detours Express 3.0:
+            http://research.microsoft.com/en-us/projects/detours/
+        DirectX SDK for 9.0c:
+            http://www.microsoft.com/en-us/download/details.aspx?id=6812
+
+    Run the Visual Studio Command Prompt and run the following commands to
+    compile the program:
+    
+    cl /EHsc wfd.cpp /I <DirectX Include Dir> /I <Detours Include Dir> /I <zlib Include Dir>
+        
+        Example:
+        cl /c /EHsc wfd.cpp /I "C:\Program Files (x86)\Microsoft Research\Detours Express 3.0\include" /I "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include" /I "C:\Program Files (x86)\zlib"
+    
+    link wfd.obj user32.lib d3d9.lib detours.lib zlib.lib /LIBPATH:<DirectX Libs> /LIBPATH:<Detours Libs> /LIBPATH:<zlib lib> /DLL /OUT:wfd.dll
+    
+        Example:
+        link wfd.obj user32.lib d3d9.lib detours.lib zlib.lib /LIBPATH:"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86" /LIBPATH:"C:\Program Files (x86)\Microsoft Research\Detours Express 3.0\lib.X86" /LIBPATH:"C:\Program Files (x86)\zlib\x86" /DLL /OUT:wfd.dll
+
+USAGE
+    To use the program you just load the wfd.dll into the target WoW process,
+    and output will be printed to "wdf.out". Search for the string "FREEZE"
+    after a freeze happens and you will see what data was received up until
+    that point.
+    
+    As for the DLL injection tool anything goes. A simplistic tool that does
+    nothing but CreateRemoteThread to call LoadLibrary from the target WoW
+    process is all you need. A quick google came up with the following tool that
+    can do that: https://github.com/OpenSecurityResearch/dllinjector

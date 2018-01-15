@@ -1,0 +1,21 @@
+-- world
+ALTER TABLE pool_template
+MODIFY COLUMN entry INT UNSIGNED NOT NULL;
+
+ALTER TABLE pool_pool
+MODIFY COLUMN pool_id INT UNSIGNED NOT NULL;
+
+ALTER TABLE pool_pool
+MODIFY COLUMN mother_pool INT UNSIGNED NOT NULL;
+
+ALTER TABLE pool_gameobject_template
+MODIFY COLUMN pool_entry INT UNSIGNED NOT NULL;
+
+ALTER TABLE pool_gameobject
+MODIFY COLUMN pool_entry INT UNSIGNED NOT NULL;
+
+ALTER TABLE pool_creature_template
+MODIFY COLUMN pool_entry INT UNSIGNED NOT NULL;
+
+ALTER TABLE pool_creature
+MODIFY COLUMN pool_entry INT UNSIGNED NOT NULL;

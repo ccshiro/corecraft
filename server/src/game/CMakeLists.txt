@@ -1,0 +1,121 @@
+#
+# Copyright (C) 2005-2012 MaNGOS project <http://getmangos.com/>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+# Build vmap if we're building tools
+if(TOOLS)
+  add_subdirectory(vmap)
+endif()
+
+file(GLOB_RECURSE game_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h)
+
+include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/vmap
+  ${CMAKE_CURRENT_SOURCE_DIR}/Warden
+  ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
+  ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour
+  ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Recast
+  ${CMAKE_SOURCE_DIR}/dep/include
+  ${CMAKE_SOURCE_DIR}/src/shared
+  ${CMAKE_SOURCE_DIR}/src/framework
+  ${CMAKE_BINARY_DIR}
+  ${CMAKE_BINARY_DIR}/src/shared
+  ${MYSQL_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIR}
+)
+
+source_group("Object"
+  REGULAR_EXPRESSION .*
+)
+
+source_group("World/Handlers"
+  # REGULAR_EXPRESSION Mgr|Handler|Manager|BattleGround|Cell|Channel|Chat|Gossip|Grid|Group|Instance|Mail|Map|Path|Pool|Quest|Script|Skill|Spell|Transports|Update|Weather|World
+  REGULAR_EXPRESSION Mgr|Handler|Manager|Cell|Channel|Chat|Gossip|Grid|Instance|Map|Path|Pool|Script|Skill|Transports|Update|Weather|World
+)
+
+source_group("Motion generators"
+  REGULAR_EXPRESSION MoveMap|MoveMapSharedDefines|Generator|MotionMaster
+)
+
+source_group("Server"
+  REGULAR_EXPRESSION Socket|Session|Opcodes|DBC
+  FILES
+    SharedDefines.h
+)
+
+source_group("Chat Commands"
+  REGULAR_EXPRESSION Level[0-9]
+  FILES
+    debugcmds.cpp
+)
+
+source_group("Tool"
+  REGULAR_EXPRESSION DatabaseCleaner|Language|PlayerDump
+)
+
+source_group("References"
+  REGULAR_EXPRESSION Reference|RefManager|ThreatManager
+)
+
+source_group("Movement"
+  REGULAR_EXPRESSION spline|Spline|packet_builder
+  FILES
+    movement/typedefs.h
+    movement/util.cpp
+)
+
+if(PCH)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
+add_library(game STATIC
+  ${game_SRCS}
+)
+
+target_link_libraries(game
+  shared
+  Detour
+  Recast
+  g3dlib
+  ${Jemalloc_LIBRARIES}
+)
+
+if(UNIX)
+  # Both systems don't have libdl and don't need them
+  if (NOT (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "NetBSD"))
+    target_link_libraries(game
+      dl
+    )
+  endif()
+endif()
+
+# Generate precompiled header
+if(PCH)
+  if(MSVC OR XCODE)
+    if(MSVC)
+      set(game_pch "${CMAKE_CURRENT_SOURCE_DIR}/pchdef.cpp")
+    endif()
+    add_native_precompiled_header(game ${CMAKE_CURRENT_SOURCE_DIR}/pchdef.h)
+  elseif(CMAKE_COMPILER_IS_GNUCXX)
+    add_precompiled_header(game ${CMAKE_CURRENT_SOURCE_DIR}/pchdef.h)
+  endif()
+endif()
+
+if(NETSTAT)
+  add_definitions(-DSERVER_LOG_NETSTAT) # define SERVER_LOG_NETSTAT
+endif()

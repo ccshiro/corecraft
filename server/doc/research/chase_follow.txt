@@ -1,0 +1,64 @@
+Unless otherwise noted all statements in this document are taken from WoD.
+
+## Terms
+Bounds: The distance away from target that respsects both target's and
+    attacker's bounding radius.
+
+# CHASE
+
+## Statements
+Stucture:
+* [if (cond) ]State/Action --> Outcome
+
+* if (Relax or Nullstate) Target out of range --> Enter "Chase" mode
+* if (Chase) Target in bounds & Stationary --> Stop & Enter "Relax" mode
+* if (Chase) Target OOR & stationary --> Run to bounds
+* if (Chase) Target moving except backing --> Predict where he's headed, and run
+             towards pos
+* if (Chase) Target backing --> Run to bounds (this is probably done so it'll
+             be easier for tanks to align NPCs and reposition them)
+* if (Chase) Target moving & us moving -->
+* if (Chase) Target deep in bounds & moving --> Go into "Pause" mode (since
+             we're predictively moving we could end up running well in front
+             otherwise)
+* if (Chase) Target moved a lot from our dest pos --> Get new dest pos
+* if (Pause) Target not in bounds --> Enter "Chase" mode
+* if (Relax) Target gets deep into bounding box -> Enter "Back" mode & Start
+             Timer
+* if (Back) Timer Expired -> Move back
+* if (Back) Target moved OOR -> Enter "Chase" mode
+* if (Back) Timer Expired & Did move & Not moving --> Enter "Relax" mode
+* if (Relax & Relax Timer Expired) Other friendly NPC attacking target is deep
+              into my bounds & we're
+             both stationary --> Enter "Spread" mode (see NOTE)
+* if (Spread) If I'm stationary & no stationary NPC is well into my bounds ->
+              Enter "Relax" mode
+* if (Spread) If I'm stationary & another stationary NPC is well into my bounds
+              & Our bounds isn't siginficantly bigger than his (big NPCs don't
+              spread out for small-fry)
+              --> Move to the right/left of said NPC
+
+NOTE: Something prevents them continously spreading when someone else walks into
+them. One part to it seems to be that they ignore NPCs currently in spread mode,
+but it also seems to be something else, like a maximum amount of NPCs that can
+spread every N seconds (or a random timer for each NPC involved), because they
+don't all spread at the same time, there's a few NPCs that reposition at a time.
+
+# FOLLOW
+
+## Statements
+Stucture:
+* [if (cond) ]State/Action --> Outcome
+
+* if (Relax) Target out of range --> Enter "Follow" mode
+* if (Follow or Nullstate) Target in range & stationary --> Enter "Relax" mode
+* if (Follow) Target moving --> Keep running towards follow pos, the NPC
+             never really stops, but he seems to slow down a bit if he hits the
+             location and is faster than his target.
+* if (Follow) Target moved a lot from our dest pos --> Get new dest pos
+
+NOTE: He seems to adjust his speed so he won't run ahead of his master. If the
+master is in walk mode, so is he (but only if close to follow pos). This
+suggests he somehow scales his speed to match the master if quicker than master.
+
+TODO: Try writing this like a finite state machine?

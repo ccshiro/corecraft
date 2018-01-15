@@ -1,0 +1,9 @@
+sql-compact takes a mysql dump created with --skip-extended-inserts and compacts
+it into a single insert query while still keeping the data split over multiple
+lines for easier revisioning in git.
+
+Compile:
+    go build sql-compact.go
+
+Usage:
+    mysqldump --skip-extended-insert database | ./sql-compact > database.sql

@@ -1,0 +1,19 @@
+-- world
+
+CREATE TABLE spell_multipart_auras
+(
+    parent INT UNSIGNED NOT NULL DEFAULT 0,
+    child INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY(parent, child)
+);
+
+INSERT INTO spell_multipart_auras VALUES
+(19574, 24395),
+(19574, 24396),
+(19574, 24397),
+(19574, 26592),
+(34471, 24395),
+(34471, 24396),
+(34471, 24397),
+(34471, 26592),
+(36797, 36798);

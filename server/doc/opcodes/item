@@ -1,0 +1,78 @@
+NAME
+        item - documentation of item opcodes
+
+SECTIONS
+        1.bag opcodes
+        2.bank opcodes
+        3.guild bank opcodes
+        4.equip opcodes
+        5.trade opcodes
+        6.miscellaneous opcodes
+
+PREREQUISITES
+        slot info:
+        slot can either be 16 bit:
+            bag(8):
+                        main bag:           255
+                        equipment:          0...18
+                        extra bags:         19...22
+                        main bag slots:     23...38
+                        main bank slots:    39...66
+                        extra bank bags:    67...73
+                        buyback slots:      74...85
+                        keyring slots:      86...117
+            slot(8):
+						TODO: Rename to index, write description.
+
+1.bag opcodes
+
+SYNOPSIS
+        CMSG_SPLIT_ITEM (0x10E)
+            src_bag(8), src_slot(8), dst_bag(8), dst_slot(8), count(8)
+            
+        CMSG_SWAP_INV_ITEM (0x10D)
+            src_bag(8), dst_bag(8)
+        
+        CMSG_SWAP_ITEM (0x10C)
+            src_bag(8), src_slot(8), dst_bag(8), dst_slot(8)
+        
+        CMSG_DESTROYITEM (0x111)
+            bag(8), slot(8), count(8), data1(8), data2(8), data3(8)
+            
+        CMSG_READ_ITEM (0x0AD)
+            bag(8), slot(8)
+            
+        CMSG_AUTOSTORE_BAG_ITEM (0x10B)
+            src_bag(8), src_slot(8), dst_bag(8)
+            
+
+DESCRIPTION
+        CMSG_SPLIT_ITEM splits count from src and places it in dst.
+        
+        CMSG_SWAP_INV_ITEM swaps an item in one of your default bags.
+        Valid ranges are: 0...18 or 23...38 or 39...66 or 86...117
+        
+        CMSG_SWAP_ITEM swaps src and dst.
+        
+        CMSG_DESTROYITEM destroys item count in (bag, slot). data1-3
+        is unknown what they mean at this point in time.
+        
+        CMSG_READ_ITEM TODO: investigate this opcode.
+        
+        CMSG_AUTOSTORE_BAG_ITEM stores src in the first available slot
+        in the dst_bag.
+
+2.bank opcodes
+TODO
+
+3.guild bank opcodes
+TODO
+
+4.equip opcodes
+TODO
+
+5.trade opcodes
+TODO
+
+6.miscellaneous opcodes
+TODO

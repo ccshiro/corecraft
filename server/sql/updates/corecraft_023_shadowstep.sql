@@ -1,0 +1,2 @@
+UPDATE `spell_affect` SET `SpellFamilyMask`='531514007210' WHERE `entry`='36563' AND `effectId`='1';
+UPDATE `spell_affect` SET `SpellFamilyMask`='531514007210' WHERE `entry`='44373' AND `effectId`='0';

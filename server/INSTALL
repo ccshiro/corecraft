@@ -1,0 +1,85 @@
+Table of Contents
+1. Installing dependencies
+2. Building the server
+3. Setting up the environment
+4. Launching and running the server
+
+1. Installing dependencies
+  TODO
+
+2. Building the server
+  CMake options:
+    -DCMAKE_INSTALL_PREFIX: Where to install binaries
+    -DDEBUG:                Debug or release mode
+    -DTESTS:                Build tests
+    -DTOOLS:                Build tools
+    (Add more commonly useful)
+
+  Clone source code into src/
+
+    git clone <repo> src
+
+  With GCC:
+    
+    cmake ../src
+    make install
+
+  With Clang:
+
+    Using libc++:
+
+        cmake ../src
+        make install
+
+    Using libstdc++:
+
+        cmake -DCLANG_CXXLIB="stdc++"
+        make install
+
+    Using Clang with a custom C++ ABI:
+
+      If you find yourself on a system with no C++14 library, or compiler, you
+      might be forced to build Clang, its library and a compatible C++ ABI
+      yourself. To do so, please consult llvm.org. In this section we assume you
+      have done the following steps:
+
+        a) Build llvm and clang with gcc and install into
+           /home/<user>/local/bin.
+
+        b) Build libc++abi and install it into /home/<user>/local/lib.
+
+        c) Build libc++ with -DLIBCXX_CXX_ABI=libcxxabi, install into
+           /home/<user>/local/ (into ./include and ./lib).
+
+        d) (Optional) rebuild llvm and clang with your newly installed clang
+           setup.
+
+        e) Build boost with your new setup, like this:
+
+           # NOTE: You could also define your own toolset which points to your
+           #       compiler
+           # make boost look for clang in our user's local bin dir
+           PATH="/home/<user>/local/bin:$PATH"
+           
+           # build boost with our clang, linking against our ABI
+           ./b2 toolset=clang --prefix=/home/<user>/local \
+           cxxflags="-std=c++14 -stdlib=libc++ -I/home/<user>/local/include" \
+           linkflags="-stdlib=libc++ -L/home/<user>/local/lib -lc++abi"
+       
+       With the above listed setup, you would compile the core like this:
+
+         cmake -DCLANG_CXXABI="c++abi" \
+               -DCLANG_INCLUDE_DIR=/home/<user>/local/include \
+               -DCLANG_LIB_DIR=/home/<user>/local/lib \
+               -DCLANG_RPATH=/home/<user>/local/lib \
+               ../src
+         make install
+
+  With MSVC:
+    TODO
+
+3. Setting up the environment
+  TODO
+
+4. Launching and running the server
+  TODO
