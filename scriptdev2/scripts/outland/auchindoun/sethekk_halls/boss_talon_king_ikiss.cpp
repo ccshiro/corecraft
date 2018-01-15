@@ -1,0 +1,275 @@
+/* Copyright (C) 2006 - 2012 ScriptDev2 <http://www.scriptdev2.com/>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/* ScriptData
+SDName: Boss_Talon_King_Ikiss
+SD%Complete: 100
+SDComment:
+SDCategory: Auchindoun, Sethekk Halls
+EndScriptData */
+
+#include "precompiled.h"
+#include "sethekk_halls.h"
+
+enum
+{
+    SAY_INTRO = -1556007,
+    SAY_AGGRO_1 = -1556008,
+    SAY_AGGRO_2 = -1556009,
+    SAY_AGGRO_3 = -1556010,
+    SAY_KILL_1 = -1556011,
+    SAY_KILL_2 = -1556012,
+    SAY_DEATH = -1556013,
+    EMOTE_ARCANE_EXP = -1556015,
+
+    SPELL_BLINK = 38194,
+    SPELL_MANA_SHIELD = 38151,
+    SPELL_ARCANE_BUBBLE = 9438,
+    SPELL_SLOW_H = 35032,
+
+    SPELL_POLYMORPH = 38245,
+    SPELL_POLYMORPH_H = 43309,
+
+    SPELL_ARCANE_VOLLEY = 35059,
+    SPELL_ARCANE_VOLLEY_H = 40424,
+
+    SPELL_ARCANE_EXPLOSION = 38197,
+    SPELL_ARCANE_EXPLOSION_H = 40425,
+};
+
+struct MANGOS_DLL_DECL boss_talon_king_ikissAI : public ScriptedAI
+{
+    boss_talon_king_ikissAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        m_bIntro = false;
+        Reset();
+    }
+
+    ScriptedInstance* m_pInstance;
+    bool m_bIsRegularMode;
+
+    uint32 m_uiArcaneVolleyTimer;
+    uint32 m_uiSheepTimer;
+    uint32 m_uiSlowTimer;
+
+    bool m_bManaShield;
+    bool m_bBlink;
+    bool m_bIntro;
+
+    float m_fNextBlinkHp;
+
+    void Reset() override
+    {
+        m_uiArcaneVolleyTimer = 5000;
+        m_uiSheepTimer = 8000;
+        m_uiSlowTimer = urand(15000, 30000);
+
+        m_bBlink = false;
+        m_bManaShield = false;
+
+        m_fNextBlinkHp = 75;
+    }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (!m_creature->getVictim() && pWho->isTargetableForAttack() &&
+            (m_creature->IsHostileTo(pWho)) &&
+            pWho->isInAccessablePlaceFor(m_creature))
+        {
+            if (!m_bIntro && m_creature->IsWithinDistInMap(pWho, 100.0f))
+            {
+                m_bIntro = true;
+                DoScriptText(SAY_INTRO, m_creature);
+            }
+        }
+
+        ScriptedAI::MoveInLineOfSight(pWho);
+    }
+
+    void Aggro(Unit* /*pWho*/) override
+    {
+        switch (urand(0, 2))
+        {
+        case 0:
+            DoScriptText(SAY_AGGRO_1, m_creature);
+            break;
+        case 1:
+            DoScriptText(SAY_AGGRO_2, m_creature);
+            break;
+        case 2:
+            DoScriptText(SAY_AGGRO_3, m_creature);
+            break;
+        }
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_IKISS, IN_PROGRESS);
+    }
+
+    void JustDied(Unit* /*pKiller*/) override
+    {
+        DoScriptText(SAY_DEATH, m_creature);
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_IKISS, DONE);
+    }
+
+    void JustReachedHome() override
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_IKISS, FAIL);
+    }
+
+    void KilledUnit(Unit* victim) override
+    {
+        DoKillSay(m_creature, victim, SAY_KILL_1, SAY_KILL_2);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (EnterEvadeIfOutOfCombatArea(uiDiff))
+            return;
+
+        if (m_bBlink)
+        {
+            m_creature->InterruptNonMeleeSpells(false);
+            if (DoCastSpellIfCan(m_creature,
+                    m_bIsRegularMode ? SPELL_ARCANE_EXPLOSION :
+                                       SPELL_ARCANE_EXPLOSION_H) == CAST_OK)
+            {
+                DoScriptText(EMOTE_ARCANE_EXP, m_creature);
+                DoCastSpellIfCan(
+                    m_creature, SPELL_ARCANE_BUBBLE, CAST_TRIGGERED);
+                m_bBlink = false;
+            }
+            return;
+        }
+
+        if (m_uiArcaneVolleyTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature,
+                    m_bIsRegularMode ? SPELL_ARCANE_VOLLEY :
+                                       SPELL_ARCANE_VOLLEY_H) == CAST_OK)
+                m_uiArcaneVolleyTimer = urand(10000, 12000);
+        }
+        else
+            m_uiArcaneVolleyTimer -= uiDiff;
+
+        if (m_uiSheepTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(
+                    ATTACKING_TARGET_RANDOM, 0))
+            {
+                DoCastSpellIfCan(pTarget,
+                    m_bIsRegularMode ? SPELL_POLYMORPH : SPELL_POLYMORPH_H);
+                m_uiSheepTimer = urand(20000, 30000);
+            }
+        }
+        else
+            m_uiSheepTimer -= uiDiff;
+
+        if (!m_bManaShield && m_creature->GetHealthPercent() <= 15.0f)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_MANA_SHIELD) == CAST_OK)
+                m_bManaShield = true;
+        }
+
+        if (!m_bIsRegularMode)
+        {
+            if (m_uiSlowTimer < uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_SLOW_H) == CAST_OK)
+                    m_uiSlowTimer = urand(15000, 30000);
+            }
+            else
+                m_uiSlowTimer -= uiDiff;
+        }
+
+        if (m_fNextBlinkHp > 1 &&
+            m_creature->GetHealthPercent() <= m_fNextBlinkHp)
+        {
+            // Teleport to clumped up targets
+            uint32 lastClumpCount = 0;
+            Unit* target = NULL;
+            const Map::PlayerList& li = m_creature->GetMap()->GetPlayers();
+            for (Map::PlayerList::const_iterator itr = li.begin();
+                 itr != li.end(); ++itr)
+            {
+                uint32 currentClumpCount =
+                    1; // We're always "clumped" with ourselves :p
+                Player* plr = itr->getSource();
+                if (m_creature->GetDistance(plr) > 100.0f) // Skip OOR targets
+                    continue;
+
+                // Compare current to all players in instance
+                for (const auto& elem : li)
+                {
+                    Player* innerPlr = elem.getSource();
+                    if (plr != innerPlr && plr->GetDistance(innerPlr) < 10.0f)
+                        ++currentClumpCount;
+                }
+
+                // Found a new target
+                if (currentClumpCount > lastClumpCount)
+                {
+                    target = plr;
+                    lastClumpCount = currentClumpCount;
+                }
+            }
+
+            // Take a random target that isn't the tank if no clumps exist
+            Unit* nonTank = NULL;
+            if (lastClumpCount == 1)
+                nonTank = m_creature->SelectAttackingTarget(
+                    ATTACKING_TARGET_RANDOM, 1);
+
+            if (nonTank)
+                target = nonTank;
+
+            if (!target)
+                return;
+
+            if (DoCastSpellIfCan(target, SPELL_BLINK,
+                    CAST_INTERRUPT_PREVIOUS | CAST_TRIGGERED) == CAST_OK)
+            {
+                m_bBlink = true;
+                m_fNextBlinkHp -= 25;
+            }
+        }
+
+        if (!m_bBlink)
+            DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_boss_talon_king_ikiss(Creature* pCreature)
+{
+    return new boss_talon_king_ikissAI(pCreature);
+}
+
+void AddSC_boss_talon_king_ikiss()
+{
+    Script* pNewScript;
+
+    pNewScript = new Script;
+    pNewScript->Name = "boss_talon_king_ikiss";
+    pNewScript->GetAI = &GetAI_boss_talon_king_ikiss;
+    pNewScript->RegisterSelf();
+}

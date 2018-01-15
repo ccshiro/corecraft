@@ -1,0 +1,176 @@
+/* Copyright (C) 2006 - 2012 ScriptDev2 <http://www.scriptdev2.com/>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/* ScriptData
+SDName: Boss_Broggok
+SD%Complete: 100
+SDComment:
+SDCategory: Hellfire Citadel, Blood Furnace
+EndScriptData */
+
+#include "blood_furnace.h"
+#include "precompiled.h"
+
+enum
+{
+    SAY_AGGRO = -1542008,
+
+    SPELL_SLIME_SPRAY = 30913,
+    SPELL_SLIME_SPRAY_H = 38458,
+    SPELL_POISON_CLOUD = 30916,
+    SPELL_POISON_BOLT = 30917,
+    SPELL_POISON_BOLT_H = 38459,
+
+    SPELL_POISON = 30914,
+
+    POINT_EVENT_COMBAT = 1,
+};
+
+struct MANGOS_DLL_DECL boss_broggokAI : public ScriptedAI
+{
+    boss_broggokAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_pInstance = (instance_blood_furnace*)pCreature->GetInstanceData();
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        Reset();
+    }
+
+    instance_blood_furnace* m_pInstance;
+    bool m_bIsRegularMode;
+
+    uint32 m_uiAcidSprayTimer;
+    uint32 m_uiPoisonSpawnTimer;
+    uint32 m_uiPoisonBoltTimer;
+
+    void Reset() override
+    {
+        m_uiAcidSprayTimer = 10000;
+        m_uiPoisonSpawnTimer = 8000;
+        m_uiPoisonBoltTimer = 5000;
+    }
+
+    void Aggro(Unit* /*pWho*/) override
+    {
+        DoScriptText(SAY_AGGRO, m_creature);
+
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_BROGGOK_EVENT, IN_PROGRESS);
+    }
+
+    void JustSummoned(Creature* pSummoned) override
+    {
+        // ToDo: set correct flags and data in DB!!!
+        pSummoned->setFaction(16);
+        pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pSummoned->CastSpell(pSummoned, SPELL_POISON, false);
+    }
+
+    void JustDied(Unit* /*pWho*/) override
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_BROGGOK_EVENT, DONE);
+    }
+
+    // Reset Orientation
+    void MovementInform(movement::gen uiMotionType, uint32 uiPointId) override
+    {
+        if (uiMotionType != movement::gen::point ||
+            uiPointId != POINT_EVENT_COMBAT)
+            return;
+
+        if (GameObject* pFrontDoor =
+                m_pInstance->GetSingleGameObjectFromStorage(
+                    GO_DOOR_BROGGOK_FRONT))
+            m_creature->SetFacingToObject(pFrontDoor);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiAcidSprayTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature,
+                    m_bIsRegularMode ? SPELL_SLIME_SPRAY :
+                                       SPELL_SLIME_SPRAY_H) == CAST_OK)
+                m_uiAcidSprayTimer = urand(12000, 18000);
+        }
+        else
+            m_uiAcidSprayTimer -= uiDiff;
+
+        if (m_uiPoisonBoltTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature,
+                    m_bIsRegularMode ? SPELL_POISON_BOLT :
+                                       SPELL_POISON_BOLT_H) == CAST_OK)
+                m_uiPoisonBoltTimer = urand(8000, 14000);
+        }
+        else
+            m_uiPoisonBoltTimer -= uiDiff;
+
+        if (m_uiPoisonSpawnTimer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_POISON_CLOUD) == CAST_OK)
+                m_uiPoisonSpawnTimer =
+                    m_bIsRegularMode ? urand(10000, 20000) : urand(4000, 8000);
+        }
+        else
+            m_uiPoisonSpawnTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+struct MANGOS_DLL_DECL mob_broggok_poisoncloudAI : public ScriptedAI
+{
+    mob_broggok_poisoncloudAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    void Reset() override {}
+    void MoveInLineOfSight(Unit* /*who*/) override {}
+    void AttackStart(Unit* /*who*/) override {}
+    void EnterEvadeMode(bool = false) override {}
+};
+
+CreatureAI* GetAI_boss_broggok(Creature* pCreature)
+{
+    return new boss_broggokAI(pCreature);
+}
+
+CreatureAI* GetAI_mob_broggok_poisoncloud(Creature* pCreature)
+{
+    return new mob_broggok_poisoncloudAI(pCreature);
+}
+
+void AddSC_boss_broggok()
+{
+    Script* pNewScript;
+
+    pNewScript = new Script;
+    pNewScript->Name = "boss_broggok";
+    pNewScript->GetAI = &GetAI_boss_broggok;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "mob_broggok_poisoncloud";
+    pNewScript->GetAI = &GetAI_mob_broggok_poisoncloud;
+    pNewScript->RegisterSelf();
+}

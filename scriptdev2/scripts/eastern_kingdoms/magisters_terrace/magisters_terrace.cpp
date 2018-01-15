@@ -1,0 +1,189 @@
+/* Copyright (C) 2006 - 2012 ScriptDev2 <http://www.scriptdev2.com/>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/* ScriptData
+SDName: Magisters_Terrace
+SD%Complete: 100
+SDComment: Quest support: 11490(post-event)
+SDCategory: Magisters Terrace
+EndScriptData */
+
+/* ContentData
+npc_kalecgos
+EndContentData */
+
+#include "precompiled.h"
+
+/*######
+## npc_kalecgos
+######*/
+
+enum
+{
+    SPELL_TRANSFORM_TO_KAEL = 44670,
+    SPELL_ORB_KILL_CREDIT = 46307,
+    NPC_KAEL = 24848, // human form entry
+    POINT_ID_LAND = 1
+};
+
+const float afKaelLandPoint[] = {225.045f, -276.236f, -5.434f};
+
+#define GOSSIP_ITEM_KAEL_1 "Who are you?"
+#define GOSSIP_ITEM_KAEL_2 "What can we do to assist you?"
+#define GOSSIP_ITEM_KAEL_3 "What brings you to the Sunwell?"
+#define GOSSIP_ITEM_KAEL_4 "You're not alone here?"
+#define GOSSIP_ITEM_KAEL_5 "What would Kil'jaeden want with a mortal woman?"
+
+// This is friendly keal that appear after used Orb.
+// If we assume DB handle summon, summon appear somewhere outside the platform
+// where Orb is
+struct MANGOS_DLL_DECL npc_kalecgosAI : public ScriptedAI
+{
+    npc_kalecgosAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    uint32 m_uiTransformTimer;
+
+    void Reset() override
+    {
+        m_uiTransformTimer = 0;
+
+        // we must assume he appear as dragon somewhere outside the platform of
+        // orb, and then move directly to here
+        /* if (m_creature->GetEntry() != NPC_KAEL) */
+        /*     m_creature->GetMotionMaster()->MovePoint(POINT_ID_LAND, */
+        /*         afKaelLandPoint[0], afKaelLandPoint[1], afKaelLandPoint[2]);
+         */
+    }
+
+    void MovementInform(movement::gen uiType, uint32 uiPointId) override
+    {
+        if (uiType != movement::gen::point)
+            return;
+
+        if (uiPointId == POINT_ID_LAND)
+            m_uiTransformTimer = MINUTE * IN_MILLISECONDS;
+    }
+
+    // some targeting issues with the spell, so use this workaround as temporary
+    // solution
+    void DoWorkaroundForQuestCredit()
+    {
+        Map* pMap = m_creature->GetMap();
+
+        if (!pMap || !pMap->IsRegularDifficulty())
+            return;
+
+        Map::PlayerList const& lList = pMap->GetPlayers();
+
+        if (lList.isEmpty())
+            return;
+
+        SpellEntry const* pSpell =
+            GetSpellStore()->LookupEntry(SPELL_ORB_KILL_CREDIT);
+
+        for (const auto& elem : lList)
+        {
+            if (Player* pPlayer = elem.getSource())
+            {
+                if (pSpell && pSpell->EffectMiscValue[0])
+                    pPlayer->KilledMonsterCredit(pSpell->EffectMiscValue[0]);
+            }
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (m_uiTransformTimer)
+        {
+            if (m_uiTransformTimer < uiDiff)
+            {
+                m_creature->CastSpell(m_creature, SPELL_ORB_KILL_CREDIT, false);
+                DoWorkaroundForQuestCredit();
+
+                // Transform and update entry, now ready for quest/read gossip
+                m_creature->CastSpell(
+                    m_creature, SPELL_TRANSFORM_TO_KAEL, false);
+                m_creature->UpdateEntry(NPC_KAEL);
+
+                m_uiTransformTimer = 0;
+            }
+            else
+                m_uiTransformTimer -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_kalecgos(Creature* pCreature)
+{
+    return new npc_kalecgosAI(pCreature);
+}
+
+bool GossipHello_npc_kalecgos(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->isQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetObjectGuid());
+
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_1,
+        GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    pPlayer->SEND_GOSSIP_MENU(12498, pCreature->GetObjectGuid());
+
+    return true;
+}
+
+bool GossipSelect_npc_kalecgos(
+    Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    switch (uiAction)
+    {
+    case GOSSIP_ACTION_INFO_DEF:
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_2,
+            GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(12500, pCreature->GetObjectGuid());
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 1:
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_3,
+            GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(12502, pCreature->GetObjectGuid());
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 2:
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_4,
+            GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(12606, pCreature->GetObjectGuid());
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 3:
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_KAEL_5,
+            GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(12607, pCreature->GetObjectGuid());
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 4:
+        pPlayer->SEND_GOSSIP_MENU(12608, pCreature->GetObjectGuid());
+        break;
+    }
+
+    return true;
+}
+
+void AddSC_magisters_terrace()
+{
+    Script* pNewScript;
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_kalecgos";
+    pNewScript->GetAI = &GetAI_npc_kalecgos;
+    pNewScript->pGossipHello = &GossipHello_npc_kalecgos;
+    pNewScript->pGossipSelect = &GossipSelect_npc_kalecgos;
+    pNewScript->RegisterSelf();
+}

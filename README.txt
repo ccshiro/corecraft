@@ -8,6 +8,7 @@ The server has been tested on Ubuntu compilled with GCC and Clang. It uses vario
 C++11/14 features and might not compile on Windows with MSVC.
 
 To run the server:
+Put scriptdev2 in bindings folder.
 Run CMake on the server directory, resolve any dependencies you're missing.
 Compile & install with make.
 Generate data files with the tools (-DTOOLS=1 for CMake).
